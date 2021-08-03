@@ -43,7 +43,6 @@ def _main(tasks):
         i+=1
         res = login(user['username'],mybase64(user['pwd']))
         print(res)
-        time.sleep(2)
          # 开始做事
         headers = {
             "content-type": "application/json;charset=UTF-8",
