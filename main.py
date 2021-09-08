@@ -1,22 +1,15 @@
+# encoding: utf-8
 import requests
 import json
 import demjson
 import base64
 import re
 import time
-mydata = {
-    "temperature": "36.7",
-    "coordinates": "中国-湖南省-长沙市-林科大区",
-    "location": "112.91107231689452,26.43942138671875",
-    "healthState": "1",
-    "dangerousRegion": "2",
-    "dangerousRegionRemark": "",
-    "contactSituation": "2",
-    "goOut": "1",
-    "goOutRemark": "",
-    "remark": "",
-    "familySituation": "1"
-}
+import random
+import io
+import sys
+from urllib.request import urlopen
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
 def mybase64(mystr):
     bytesStr = mystr.encode(encoding='utf-8')
     temp = str(base64.b64encode(bytesStr))
@@ -39,6 +32,7 @@ def login(username,pwd):
 
 def _main(tasks):
     i = 0
+    allres = []
     for user in tasks:
         i+=1
         res = login(user['username'],mybase64(user['pwd']))
@@ -48,20 +42,43 @@ def _main(tasks):
             "content-type": "application/json;charset=UTF-8",
             "authorization":"Bearer " + res["token"]
         }
+        mydata = {
+            "temperature": "36."+time.strftime("%d",time.localtime()),
+            "coordinates": "中国-湖南省-长沙市-望城区",
+            "location": "112.91107231689452,26.43942138671875",
+            "healthState": "1",
+            "dangerousRegion": "2",
+            "dangerousRegionRemark": "",
+            "contactSituation": "2",
+            "goOut": "1",
+            "goOutRemark": "",
+            "remark": "",
+            "familySituation": "1"
+        }
         res = requests.post('https://xiaobei.yinghuaonline.com/prod-api/student/health/',data=json.dumps(mydata),headers=headers)
-        print(demjson.decode(res.text))
+        allres.append(demjson.decode(res.text))
         time.sleep(1)
     print("总共登陆了%s个账号"%i)
+    return allres
 
 
-def start():
+def start(a=1,b=2):
     alluser = []
     user1 = {
-        "username":"你的账号",
-        "pwd":"你的密码"
+        "username":"431103200009260311",
+        "pwd":"260311"
+    }
+    user2 = {
+        "username":"43070320000508165X",
+        "pwd":"20188592"
+    }
+    user3 = {
+        "username":"431022199903046799",
+        "pwd":"046799",
     }
 
     alluser.append(user1)
-    _main(alluser)
-
-start()
+    for _ in range(1):
+        alluser.append(user2)
+        alluser.append(user3)
+    return _main(alluser)
