@@ -18,15 +18,17 @@ def mybase64(mystr):
 def login(username,pwd):
     # 登陆
     data = {
-        "code": "RL4W",
+        "code": "M26J",
         "password": pwd,
         "username": username,
-        "uuid": "d0a4a39c6e3a4c0ea0c009c550936ad5"
+        "uuid": "111cfa044a9c4d228cb3687a0e4201ca"
     }
     headers = {
             "content-type": "application/json;charset=UTF-8",
     }
-    res = demjson.decode(requests.post('https://xiaobei.yinghuaonline.com/prod-api/login',data=json.dumps(data),headers=headers).text)
+    temp_res = requests.post('https://xiaobei.yinghuaonline.com/xiaobei-api/login',data=json.dumps(data),headers=headers).text
+    print(temp_res)
+    res = demjson.decode(temp_res)
     return res
 
 
@@ -55,7 +57,7 @@ def _main(tasks):
             "remark": "",
             "familySituation": "1"
         }
-        res = requests.post('https://xiaobei.yinghuaonline.com/prod-api/student/health/',data=json.dumps(mydata),headers=headers)
+        res = requests.post('https://xiaobei.yinghuaonline.com/xiaobei-api/student/health/',data=json.dumps(mydata),headers=headers)
         allres.append(demjson.decode(res.text))
         time.sleep(1)
     print("总共登陆了%s个账号"%i)
@@ -82,3 +84,5 @@ def start(a=1,b=2):
         alluser.append(user2)
         alluser.append(user3)
     return _main(alluser)
+
+start()
