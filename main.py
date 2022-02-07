@@ -17,17 +17,23 @@ def mybase64(mystr):
     return pattren.findall(temp)[0]
 def login(username,pwd):
     # 登陆
+    headers = {
+        "user-agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/20) uni-app"
+    }
+    requests.post("https://xiaobei.yinghuaonline.com/xiaobei-api/captchaImage",headers=headers)
     data = {
         "code": "M26J",
         "password": pwd,
         "username": username,
-        "uuid": "111cfa044a9c4d228cb3687a0e4201ca"
+        "code": "SJCA",
+        "uuid": "bd5ed14985394a04a076d79d27a266f7",
+        "appUuid": "392D3E41-2BC4-41F6-A127-CBD91F00418F"
     }
     headers = {
-            "content-type": "application/json;charset=UTF-8",
+            "content-type": "application/json;",
+            "user-agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/20) uni-app",
     }
     temp_res = requests.post('https://xiaobei.yinghuaonline.com/xiaobei-api/login',data=json.dumps(data),headers=headers).text
-    print(temp_res)
     res = demjson.decode(temp_res)
     return res
 
@@ -41,13 +47,14 @@ def _main(tasks):
         print(res)
          # 开始做事
         headers = {
-            "content-type": "application/json;charset=UTF-8",
-            "authorization":"Bearer " + res["token"]
+            "content-type": "application/json",
+            "authorization":"Bearer " + res["token"],
+            "user-agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/20) uni-app"
         }
         mydata = {
-            "temperature": "36."+time.strftime("%d",time.localtime()),
-            "coordinates": "中国-湖南省-长沙市-望城区",
-            "location": "112.91107231689452,26.43942138671875",
+            "temperature": "36.5",
+            "coordinates": "undefined-湖南省-永州市-冷水滩区",
+            "location": "111.6186691623264,26.43941731770833",
             "healthState": "1",
             "dangerousRegion": "2",
             "dangerousRegionRemark": "",
@@ -57,32 +64,21 @@ def _main(tasks):
             "remark": "",
             "familySituation": "1"
         }
-        res = requests.post('https://xiaobei.yinghuaonline.com/xiaobei-api/student/health/',data=json.dumps(mydata),headers=headers)
+        res = requests.post('https://xiaobei.yinghuaonline.com/xiaobei-api/student/health',data=json.dumps(mydata),headers=headers)
         allres.append(demjson.decode(res.text))
         time.sleep(1)
     print("总共登陆了%s个账号"%i)
+    print(allres)
     return allres
 
 
 def start(a=1,b=2):
     alluser = []
     user1 = {
-        "username":"431103200009260311",
-        "pwd":"260311"
+        "username":"666",# 学号
+        "pwd":"666" # 密码
     }
-    user2 = {
-        "username":"43070320000508165X",
-        "pwd":"20188592"
-    }
-    user3 = {
-        "username":"431022199903046799",
-        "pwd":"046799",
-    }
-
     alluser.append(user1)
-    for _ in range(1):
-        alluser.append(user2)
-        alluser.append(user3)
     return _main(alluser)
 
 start()
